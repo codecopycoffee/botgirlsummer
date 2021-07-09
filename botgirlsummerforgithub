@@ -11,7 +11,7 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 def chirp():
-	if datetime.date.today().weekday() == 0:
+    if datetime.date.today().weekday() == 0:
         msg = 'Oh man, Monday again!? Okay, we\'re gonna get through this. Drink some water, take deep breaths, and stay calm! #mondaymotivation #botgirlsummer #hotgirlsummer'
     if datetime.date.today().weekday() == 1:
         msg = 'Taco Tuesday? Heck yeah! Nourish your body with your favorite food today, even if that isn\'t tacos (but let\'s be real... it\'s probably tacos). #tacotuesday #botgirlsummer #hotgirlsummer'
