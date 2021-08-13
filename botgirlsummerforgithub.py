@@ -26,7 +26,11 @@ def chirp():
 	elif datetime.date.today().weekday() == 6:
 		msg = 'It\'s self care sunday! Make sure to do something nice for yourself today, even if it\'s just reminding yourself what a wonderful person you are. :) #sundayfunday #botgirlsummer #hotgirlsummer'
 
-	api.update_status(msg)
+	try:
+		api.update_status(msg)
+		print('Successfully tweeted.')
+	except Exception as e:
+		print(e)
 
 chirp()
 
@@ -36,37 +40,38 @@ def replyToTweets():
 
 	textToFind = ['#hotgirlsummer', '#Hotgirlsummer', '#HotGirlSummer', '#HOTGIRLSUMMER']
 
-	for t in twtToSearch:
-		for i in textToFind:
-			if i == t.text:
-				screenName = t.user.screen_name
-				response = "@%s Happy Hot Girl Summer! Don\'t forget to stay hydrated!" % (screenName)
-				t = api.update_status(response, t.id)
-				counter += 1
-
-	print('Replied to ' + str(counter) + ' tweets.')
+	try:
+		for t in twtToSearch:
+			for i in textToFind:
+				if i == t.text:
+					screenName = t.user.screen_name
+					response = "@%s Happy Hot Girl Summer! Don\'t forget to stay hydrated!" % (screenName)
+					t = api.update_status(response, t.id)
+					counter += 1
+		print('Replied to ' + str(counter) + ' tweets.')
+	except Exception as e:
+		print(e)
 
 replyToTweets()
 
 def likeTweets():
-	searchFor = api.search(q="#hotgirlsummer")
-	favedStart = []
-	unfavedStart = []
-	favedEnd = []
+	searchFor = api.search(q="hot girl summer")
+	faved = []
+	errored = []
+	total = []
 
 	for s in searchFor:
-		if s.favorited:
-			favedStart.append(s)
-		elif not s.favorited:
-			unfavedStart.append(s)
-			try:
-				s.favorite()
-				favedEnd.append(s)
-			except:
-				print('Errored tweet')
+		try:
+			s.favorite()
+			faved.append(s)
+			total.append(s)
+		except Exception as e:
+			print(e)
+			errored.append(s)
+			total.append(s)
 
-	print('Started with ' + str(len(favedStart)) + ' already favorited.')
-	print('Started with ' + str(len(unfavedStart)) + ' not yet favorited.')
-	print('Favorited ' + str(len(favedEnd)) + ' tweets.')
+	print('Favorited: ' + str(len(faved)) + ' tweets.')
+	print('Errored: ' + str(len(errored)) + ' tweets.')
+	print('Total: ' + str(len(total)) + ' tweets.')
 
 likeTweets()
